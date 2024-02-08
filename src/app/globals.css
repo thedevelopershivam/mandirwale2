@@ -1,33 +1,102 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Josefin+Sans:wght@300;400;500;600;700&display=swap');
+
+* {
+  /* font-family: 'Dancing Script', cursive; */
+  font-family: 'Josefin Sans', sans-serif;
+}
+
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  /* background colours */
+  --bg-safron: #FF9933;
+  --bg-white: #FFFFFF;
+  --bg-neel: #001F3F;
+  --bg-green: #008000;
+  --bg-gold: #FFD700;
+  --bg-Maroon: #800000;
+  --bg-Maroon-light: #800000a4;
+
+  /* text colours */
+  --text-danger: rgb(180, 40, 40);
+  --text-maroon: #800000;
+  --text-neel: #001F3F;
+  --text-safron: #FF9933;
+  --text-success: rgb(30, 120, 30);
+  --text-link: rgb(30, 30, 120);
+  --text-primary: #333333;
+  --text-white: #FFFFFF;
+
+  /* button colours */
+  --button-danger: rgb(220, 60, 60);
+  --button-maroon: #800000;
+  --button-neel: #001F3F;
+  --button-safron: #FF9933;
+  --button-success: rgb(30, 120, 30);
+  --button-link: rgb(30, 30, 120);
+  --button-primary: #333333;
+  --button-white: #FFFFFF;
+
+  /* shadow */
+  --box-shadowLight: 0 0 10px rgba(0, 0, 0, 1);
+  --box-shadow-down: 0 10px 15px -5px rgba(0, 0, 0, .5);
+  --box-shadow-down2: 0 10px 20px -5px rgba(0, 0, 0, .3);
+
+  /* border  */
+  --border-safronL: 1px solid var(--bg-safron);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+.maroonGradient {
+  background: linear-gradient(90deg, var(--bg-Maroon), var(--bg-Maroon));
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+.dot {
+  background: var(--bg-Maroon) !important;
+  width: 15px !important;
+  height: 15px !important;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+.vs::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+.vs::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+.vs::-webkit-scrollbar-thumb {
+  background: var(--bg-safron);
+}
+
+/* Handle on hover */
+.vs::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* hs */
+.hs::-webkit-scrollbar {
+  height: 5px;
+}
+
+/* Track */
+.hs::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+.hs::-webkit-scrollbar-thumb {
+  background: var(--bg-safron);
+}
+
+/* Handle on hover */
+.hs::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.animate-1 {
+  animation-iteration-count: 1 !important;
 }
