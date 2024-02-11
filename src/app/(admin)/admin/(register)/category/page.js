@@ -7,6 +7,7 @@ import LabelInput from "@/app/components/form/LabeInput";
 import Button from '@/app/components/Button';
 import { useState } from 'react';
 
+
 function Td({ children }) {
     return (
         <td className="font-semibold text-center w-auto px-3 whitespace-nowrap min-w-20">
@@ -34,30 +35,20 @@ export default function page() {
     };
 
     const createCategory = async (e) => {
-
+        console.log(categoryData)
         e.preventDefault();
         const formData = new FormData();
-
         formData.append("files", categoryData?.files || "no data");
         formData.append('category', categoryData?.category);
-        console.log({ categoryData })
-        try {
-            await axios.post("/api/users/admin/category", { category: categoryData.category })
-                .then((res) => {
-                    if (res?.data?.error) {
-                        setError(true);
-                        setErrorMsg(res?.data?.error)
-                        return error;
-                    }
-                    if (res?.data?.status === "success") {
-                        setData(res.data.data)
-                    }
 
-                }).catch((err) =>
-                    console.log(err)
-                );
+        try {
+            const res = await axios.post("/api/users/admin/category", categoryData);
+
+            if (res.data.status === "success") {
+                setData(res.data.message.message)
+            }
         } catch (err) {
-            console.log("hey")
+            console.log(err)
         }
     }
 
@@ -65,28 +56,28 @@ export default function page() {
         <section className='w-full px-5'>
             <div className='flex justify-end my-4'>
                 <MuiModal header="Create category">
-
-
-                    <div className='flex flex-col gap-2'>
-                        <LabelInput
-                            type='text'
-                            label='Category Name'
-                            className="py-2"
-                            onChange={(e) => setCategoryData({ ...categoryData, category: e.target.value })}
-                            error={error}
-                            errorMsg={errorMsg}
-                        />
-                        <LabelInput
-                            type='file'
-                            label='File'
-                            className="py-2"
-                            onChange={(e) => setCategoryData({ ...categoryData, files: e.target.files[0] })}
-                            error={error && error}
-                        />
-                        <Button type='submit' className="max-w-[130px] mx-auto bg-butNeel mt-2" onClick={createCategory}>
-                            Save
-                        </Button>
-                    </div>
+                    <form onSubmit={createCategory}>
+                        <div className='flex flex-col gap-2'>
+                            <LabelInput
+                                type='text'
+                                label='Category Name'
+                                className="py-2"
+                                onChange={(e) => setCategoryData({ ...categoryData, category: e.target.value })}
+                                error={error}
+                                errorMsg={errorMsg}
+                            />
+                            <LabelInput
+                                type='file'
+                                label='File'
+                                className="py-2"
+                                onChange={(e) => setCategoryData({ ...categoryData, files: e.target.files[0] })}
+                                error={error && error}
+                            />
+                            <Button type='submit' className="max-w-[130px] mx-auto bg-butNeel mt-2">
+                                Save
+                            </Button>
+                        </div>
+                    </form>
 
                 </MuiModal>
             </div>

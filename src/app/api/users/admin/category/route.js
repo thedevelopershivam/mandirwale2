@@ -1,16 +1,24 @@
-import axios from "axios"
+import axios from "@/app/util/axios";
 import { NextResponse } from 'next/server';
 
+
 export const POST = async (request) => {
-    const data = await request.json();
-    console.log("💖💖💖💖💖💖💖💖💖💖💖💖💖💖💖💖💖💖")
+
+    const reqBody = await request.json();
+    let response = NextResponse.json({});
 
     try {
-        await axios.post("/create-category", request)
-            .then((res) => NextResponse.json(res))
-            .catch((e) => {
-                return NextResponse.json({ e })
+        await axios.post("http://localhost:8000/api/v1/admin/create-category", reqBody)
+            .then((res) => {
+                response = NextResponse.json({
+                    status: 'success',
+                    message: res.data
+                });
             })
+            .catch((e) => {
+                console.log(e)
+                return e;
+            })
+        return response;
     } catch (err) { return NextResponse.json({ err }) };
-    return NextResponse.json({ name: "hey" });
 }
