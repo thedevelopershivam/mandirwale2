@@ -1,34 +1,50 @@
-import axios from 'axios';
-import { headers } from 'next/headers';
+// Assuming you have a way to extract the token, perhaps from cookies or context
 
+import { headers } from "next/headers";
 
-// Create an Axios instance
-const axiosInstance = axios.create({
-});
+function getToken() {
 
-// Set the AUTH token for any request
-axiosInstance.interceptors.request.use(function (config) {
-    const headersList = headers()
+    const headersList = headers();
     const token = headersList.get("cookie").replace("token=", "");
+    console.log({ token });
+    return token;
+
+}
+
+async function customFetch(url, options = {}) {
+    const token = getToken();
+
+    const headers = {
+        'Accept': 'application/json',
+    };
+
+
     if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-        config.headers.jwt = `${token}`;
-        config.headers['Content-Type'] = `application/json`;
+        headers['Authorization'] = `Bearer ${token}`
     }
 
-    return config;
+    if (options.body instanceof FormData) {
+        delete headers['Content-Type']; // Let the browser set it
+    } else {
+        headers['Content-Type'] = 'application/json';
+    }
 
-}, function (error) {
-    return Promise.reject(error);
-});
+    console.log({ options });
+    const fetchOptions = {
+        ...options,
+    };
 
+    // Perform the fetch request
+    const response = await fetch(url, fetchOptions);
 
+    // Handle response or errors
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
 
-axios.interceptors.response.use(function (response) {
+    return response.json({
+        response: response
+    }); // Or handle as needed
+}
 
-    return response;
-}, function (error) {
-    return Promise.reject(error);
-});
-
-export default axiosInstance;
+export default customFetch;

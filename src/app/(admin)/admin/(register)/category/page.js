@@ -35,20 +35,17 @@ export default function page() {
     };
 
     const createCategory = async (e) => {
-        console.log(categoryData)
         e.preventDefault();
         const formData = new FormData();
-        formData.append("files", categoryData?.files || "no data");
+        formData.append("files", categoryData?.files);
         formData.append('category', categoryData?.category);
-
         try {
-            const res = await axios.post("/api/users/admin/category", categoryData);
-
-            if (res.data.status === "success") {
-                setData(res.data.message.message)
-            }
+            const res = await fetch("/api/users/admin/category", {
+                method: "POST",
+                body: formData,
+            });
         } catch (err) {
-            console.log(err)
+            console.log(err.data)
         }
     }
 
