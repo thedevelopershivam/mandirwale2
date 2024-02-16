@@ -37,13 +37,18 @@ export default function page() {
     const createCategory = async (e) => {
         e.preventDefault();
         const formData = new FormData();
-        formData.append("files", categoryData?.files);
+        formData.append("files", categoryData?.file);
         formData.append('category', categoryData?.category);
         try {
             const res = await fetch("/api/users/admin/category", {
                 method: "POST",
-                body: formData,
+                body: categoryData,
+                headers: {
+                    "Content-Type": "multimedia/form-data"
+                }
             });
+
+            console.log(res)
         } catch (err) {
             console.log(err.data)
         }
@@ -67,7 +72,7 @@ export default function page() {
                                 type='file'
                                 label='File'
                                 className="py-2"
-                                onChange={(e) => setCategoryData({ ...categoryData, files: e.target.files[0] })}
+                                onChange={(e) => setCategoryData({ ...categoryData, file: e.target.files[0] })}
                                 error={error && error}
                             />
                             <Button type='submit' className="max-w-[130px] mx-auto bg-butNeel mt-2">
