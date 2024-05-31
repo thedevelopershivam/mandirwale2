@@ -5,39 +5,47 @@ import Image from "next/image"
 import { IoCalendarOutline } from "react-icons/io5"
 import { H3 } from "./Headings"
 import Badge from "./Badge"
+import Slider from "./Slider"
+import FormatedDate from "./FormatedDate"
 
-function BlogFull() {
+
+function BlogFull({ data, category }) {
+
+    console.log({category});
+
+    const file = JSON.parse(data?.processFile);
+    console.log({data});
+
+    
     return (
-        <section className="w-full flex flex-col  rounded-md shadow-shadowDownL pb-3 border-[2px] border-transparent bg-bgWhite relative">
-            <section className="absolute left-0 right-0 top-2 flex justify-between items-center w-[100%] mx-auto px-3">
-                <IconText className="bg-[#fff] px-2 rounded-full font-semibold" icon={<PiEyeLight />} text={25} />
+        <section className="w-full flex flex-col rounded-md shadow-shadowDownL pb-3 border-[2px] border-transparent bg-white relative mb-20">
 
-                <LikeButton />
-            </section>
-            <Image src="/assets/images/first.jpg" className="rounded-t-md" width={2160} height={2160} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            <div className="bg-white">
+                <Slider images={file} title={data.title}/>
+            </div>
 
-            <div className="flex justify-between flex-wrap px-2 my-2 gap-y-0 gap-x-2 font-medium">
+            <div className="flex justify-between flex-wrap px-2 my-2 gap-y-2 gap-x-2 font-medium capitalize">
 
                 <IconText
                     icon={<PiMapPinLineThin size={22} />}
-                    text="Andhra Pradesh, India"
+                    text={`${data?.address?.city?.city}, ${data?.address?.state?.state}, ${data?.address?.country?.country}`}
                 />
 
                 <IconText
                     icon={<IoCalendarOutline size={22} />}
-                    text="2023-12-20 04:30 AM"
+                    text={`${FormatedDate(data.createdAt) }`}
                 />
             </div>
-            <div className="flex justify-between items-center flex-wrap px-3 gap-3 my-1">
-                <H3 className="txet-textNeel"> Lord Ganesha  </H3>
-                <Badge />
+            <div className="flex  flex-col-reverse md:flex-row md:justify-between md:items-center px-3 gap-3 my-2 md:my-1  ">
+                <H3 className="text-textNeel capitalize"> 
+                {data?.title}  
+                </H3>
+                <span>
+                    <Badge href={`/${category}?page=1&god=${data?.lowerCategory?.lowerCategory}`} badge={data?.lowerCategory?.lowerCategory} />
+                </span>
             </div>
 
-            <section className="px-3">
-                <p>
-                    Take the hassle out of icons in your website.
-                    Font Awesome is the Internet's icon library and toolkit, used by millions of designers, developers, and content creators.
-                </p>
+            <section className="px-3 first-letter:capitalize first-letter:text-[30px] first-letter:font-serif" dangerouslySetInnerHTML={{__html: data?.hindiPost }}>
             </section>
         </section>
     )

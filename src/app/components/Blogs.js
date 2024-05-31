@@ -1,26 +1,28 @@
+import Link from "next/link"
 import Blog from "./Blog"
 import { H2 } from "./Headings"
-import ViewMore from "./ViewMore"
 import Wrapper from "./Wrapper"
 
-function Blogs() {
+function Blogs({data}) {
     return (
-        <Wrapper className="flex flex-col gap-2 justify-center items-center">
-            <H2 className="text-textLink capitalize">
-                Blogs
-            </H2>
-
-            <section className='grid grid-cols-1 xs:grid-cols-2 md:grid-cols-4 gap-4'>
-                <Blog />
-                <Blog />
-                <Blog />
-                <Blog />
-            </section>
-
-            <ViewMore>
-                View More
-            </ViewMore>
-        </Wrapper>
+        <>
+            <Wrapper className="flex flex-col gap-2 justify-center items-center">
+                <section className='grid grid-cols-1 sm:grid-cols-2   md:grid-cols-3 gap-y-10 gap-x-5 md:gap-y-5'>
+                    {
+                        data?.map((item, index) =>
+                        <Blog
+                            title={item.title}
+                            key={index}
+                            description={{ __html: item?.hindiPost }}
+                                href={`${item?.category?.category}?category=${item?.subCategory?.subCategory}&subCategory=${item?.lowerCategory?.lowerCategory}&postId=${item?.id}&title=${item?.title}`}
+                        />)
+                    }
+                </section>
+            </Wrapper>
+            {/* <Link href={"#"} className="text-end pr-11 mt-5 font-semibold">
+                View All
+            </Link> */}
+        </>
     )
 }
 

@@ -1,15 +1,18 @@
-function LabeInput({ label = "username", type = "text", placeholder = "your name", onChange, error, errorMsg, className, attr }) {
+function LabeInput({ label = "username", type = "text", placeholder = "your name", onChange = (e)=>{console.log(e.target.value)}, error = false, errorMsg, className, value = "", required = true }) {
     return (
         <label className="flex flex-col">
-            <span className="text-textNeel capitalize"> {label} </span>
+            <span className="capitalize"> {label} </span>
             <input
                 type={type}
-                className={` py-1 px-2 w-full rounded focus:outline-none border-[1px] ${className}`}
+                className={`py-1 px-2 w-full rounded focus:outline-none border-[1px] h-10 lowercase
+                ${className} invalid:border-red-500`
+                }
                 placeholder={placeholder}
                 onChange={onChange}
-                {...attr}
+                value={value}
+                required={required}
             />
-            {error && <span className=" text-[13px] font-semibold text-textDanger">
+            {error && <span className=" text-[13px] font-semibold text-textDanger"> 
                 {errorMsg}
             </span>}
 

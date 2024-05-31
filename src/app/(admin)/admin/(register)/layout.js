@@ -1,5 +1,4 @@
 import { Inter } from 'next/font/google'
-// import '../../../globals.css'
 import Navbar from '../../../components/admin/Navbar'
 import LeftMenu from '../../../components/admin/LeftMenu'
 

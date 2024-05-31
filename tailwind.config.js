@@ -7,6 +7,10 @@ module.exports = {
   ],
   theme: {
     extend: {
+      screens:{
+        second: "850px",
+        third: "650px"
+      },
       backgroundColor: {
         bgSafron: "var(--bg-safron)",
         bgWhite: "var(--bg-white)",

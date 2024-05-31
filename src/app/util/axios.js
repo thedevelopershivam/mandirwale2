@@ -1,34 +1,39 @@
 import axios from 'axios';
-import { headers } from 'next/headers';
+import Cookies from "js-cookie";
+import { NextResponse } from 'next/server';
 
-
-// Create an Axios instance
 const axiosInstance = axios.create({
+    baseURL: "http://localhost:8000/api/v1/admin"
 });
 
-// Set the AUTH token for any request
 axiosInstance.interceptors.request.use(function (config) {
-
-    const headersList = headers();
-
-    const token = headersList.get("cookie").replace("token=", "");
-    if (token) {
+    const token = localStorage.getItem("token");
+    console.log({ token })
+    if (token && token !== "" && token !== undefined) {
         config.headers.Authorization = `Bearer ${token}`;
-        config.headers.jwt = `${token}`;
-        config.headers['Content-Type'] = `application/json`;
     }
-    return config;
-}, function (error) {
-    return Promise.reject(error);
+    return config
 });
 
+axiosInstance.interceptors.response.use(
+    response => {
+        return response;
+    },
+    error => {
+        let response = NextResponse.next()
+        console.log(error?.response?.data);
+        if (
+            error?.response?.data?.errors === "You are not authorise person to perform this action!"
+            || error?.response?.data?.errors === "You are not authorise person for view this page!"
+            || error?.response?.data?.errors === "Your recently changed password, login again pls"
+        ) {
 
-
-axios.interceptors.response.use(function (response) {
-
-    return response;
-}, function (error) {
-    return Promise.reject(error);
-});
+            alert(error?.response?.data?.errors);
+            Cookies.remove('Authorization', { path: '/', secure: true })
+            return NextResponse.redirect(new URL('/admin/login', request.url))
+        }
+        return Promise.reject(error?.data?.data);
+    }
+);
 
 export default axiosInstance;

@@ -3,7 +3,7 @@ import React, { Children } from 'react'
 export function H1({ className, children }) {
     return (
         <h1 className={`text-[calc(30px+.5vw)] font-medium ${className}`}>
-            {children}
+            <span className="headingLine"> {children} </span>
         </h1>
     )
 }

@@ -1,93 +1,115 @@
-"use client"
-import React, { useEffect } from 'react';
-// import TopNavbar from '@/app/components/TopNavbar';
-import BootstrapCarousel from '../components/BootstrapCarousel';
-import Wrapper from '../components/Wrapper';
-import { H1, H2 } from '../components/Headings';
-import ProductCard from '../components/ProductCard';
-import ViewMore from '../components/ViewMore';
-import RoundIcon from '../components/RoundIcon';
-import TinyCard from '../components/TinyCard';
+
+import React from 'react';
+import dynamic from 'next/dynamic';
+
+import Wrapper from '@/app/components/Wrapper';
+import { H1, H2 } from '@/app/components/Headings';
+// import ProductCard from '@/app/components/ProductCard';
+// import ViewMore from '@/app/components/ViewMore';
+import RoundIcon from '@/app/components/RoundIcon';
+
+import Review from '@/app/components/index/Review';
+import TopCollage from '@/app/components/index/TopCollage';
+import OurServices from '../components/index/OurServices';
+import HoroscopeCard from '@/app/components/index/HoroscopeCard';
 import Blogs from '../components/Blogs';
+import BhagwatGita from '@/app/components/index/BhagwatGita';
+import ContactUs from '../components/index/ContactUs';
+import AboutUs from '../components/index/AboutUs';
+import ViewMore from '../components/ViewMore';
 
-function page() {
+async function getTopBanner() {
+  const data = await fetch("http://localhost:8000/api/v1/user/index-top-banner");
+  const rec = data.json();
+  return rec;
+}
+
+// async function getRandomTemple() {
+//   const data = await fetch("http://localhost:8000/api/v1/user/index-top-banner");
+//   const rec = data.json();
+//   return rec;
+// }
+
+
+async function page() {
+  const data = await getTopBanner();
+
+
+  
+
   return (
-    <section className='flex flex-col gap-12'>
+    <div className='flex flex-col gap-20 mb-10 w-full'>
+      <TopCollage topBanner={data} />
 
-      <BootstrapCarousel />
-      {/* temples */}
-      <Wrapper className='flex flex-col gap-3 justify-center items-center'>
-        <H2 className="text-textLink capitalize"> Some Important temples </H2>
-        <div className="h-auto grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-        </div>
-        <ViewMore>
-          View More
-        </ViewMore>
-      </Wrapper>
+      <div className='flex flex-col gap-1 text-center bg-[rgba(100,100,100,.04)] py-6'>
+        <H1> Gods  </H1>
+        <Wrapper className='flex flex-row md:justify-center items-center overflow-x-auto gap-4 hs p-3 mx-5 snap-mandatory snap-x '>
 
-
-      {/*  */}
-      <Wrapper className='flex flex-col justify-center items-center gap-3'>
-        <H2 className="text-textLink capitalize">
-          List of all gods
-        </H2>
-        <div className='grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 sm:gap-8'>
-          <RoundIcon />
-          <RoundIcon />
-          <RoundIcon />
-          <RoundIcon />
-          <RoundIcon />
-          <RoundIcon />
-          <RoundIcon />
-          <RoundIcon />
-          <RoundIcon />
-          <RoundIcon />
-          <RoundIcon />
-          <RoundIcon />
-          <RoundIcon />
-          <RoundIcon />
-          <RoundIcon />
-        </div>
-        <ViewMore>
-          View More
-        </ViewMore>
-
-      </Wrapper>
-      {/* +++++++++++++ services +++++++++++++ */}
-      <Wrapper className='flex flex-col justify-center items-center gap-3'>
-        <H2 className="text-textLink capitalize">
-          temples state wise
-        </H2>
-        <div className='grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 xs:grid-cols-2 grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8'>
-
-          <TinyCard />
-          <TinyCard />
-          <TinyCard />
-          <TinyCard />
-          <TinyCard />
-          <TinyCard />
-          <TinyCard />
-          <TinyCard />
-          <TinyCard />
-          <TinyCard />
-
-        </div>
-        <ViewMore>
-          View More
-        </ViewMore>
-      </Wrapper>
-      {/* +++++++++++++ services +++++++++++++ */}
+          {
+            data?.fiveTemples?.map((item, index) =>
+              <RoundIcon href={`/${item?.category?.category?.toLowerCase() }/${item?.subCategory?.subCategory?.toLowerCase()}/${item?.lowerCategory?.lowerCategory?.toLowerCase()}/`}
+                name={item?.lowerCategory?.lowerCategory}
+                count={item?.lowerCategory?.count}
+                key={index}
+              />
+            )
+          }
 
 
-      {/* =============== Blogs ============== */}
-      <Blogs />
-      {/* =============== Blogs ============== */}
 
-    </section>
+        </Wrapper>
+        <Wrapper>
+          <ViewMore href={`/${data?.fiveTemples[0]?.category?.category}/${data?.fiveTemples[0]?.subCategory?.subCategory}`}>
+            View More
+          </ViewMore>
+        </Wrapper>
+      </div>
+
+      <div className='flex flex-col gap-1 text-center bg-[rgba(0,100,0,.04)] py-6'>
+        <H1> Our Services  </H1>
+        <OurServices />
+      </div>
+
+      <div className='flex flex-col gap-1 text-center bg-[rgba(0,0,100,.04)] py-6'>
+        <H1> Horoscope  </H1>
+        <Wrapper className={`grid grid-cols-1  sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8`}>
+          <HoroscopeCard />
+          <HoroscopeCard />
+          <HoroscopeCard />
+
+          <HoroscopeCard />
+          <HoroscopeCard />
+          <HoroscopeCard />
+        </Wrapper>
+      </div>
+
+      <div className='flex flex-col gap-1 text-center bg-[rgba(100,0,100,.04)] py-6'>
+        <H1> Our Recent Blogs  </H1>
+        <Blogs data={data?.threeBlogs} />
+      </div>
+
+      <div className='flex flex-col gap-1 text-center bg-[rgba(100,0,0,.04)] py-6'>
+        <H1> Bhagwat Gita Quotes  </H1>
+        <BhagwatGita />
+      </div>
+
+      <div className='flex flex-col gap-1 text-center bg-[rgba(100,0,0,.04)] py-6'>
+        <H1> About Us  </H1>
+        <AboutUs />
+      </div>
+
+
+      <div className='flex flex-col gap-1 text-center bg-[rgba(0,100,100,.04)] py-6'>
+        <H1> Review  </H1>
+        <Review />
+      </div>
+
+      <div className='flex flex-col gap-1 text-center py-6 bg-[url(/assets/images/bhagwat_gita/peackok_feature.jpeg)] bg-center bg-no-repeat bg-cover'>
+        <ContactUs />
+      </div>
+
+
+    </div>
   )
 }
 

